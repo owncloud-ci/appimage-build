@@ -1,6 +1,6 @@
 def main(ctx):
   versions = [
-    'latest',
+    'centos7',
   ]
 
   arches = [
@@ -19,10 +19,8 @@ def main(ctx):
   for version in versions:
     config['version'] = version
 
-    if config['version'] == 'latest':
-      config['path'] = 'latest'
-    else:
-      config['path'] = 'v%s' % config['version']
+    # unlike other repositories, e.g., appimage-deployment, this repo manages different distributions
+    config['path'] = '%s' % config['version']
 
     m = manifest(config)
     inner = []
@@ -30,10 +28,7 @@ def main(ctx):
     for arch in arches:
       config['arch'] = arch
 
-      if config['version'] == 'latest':
-        config['tag'] = arch
-      else:
-        config['tag'] = '%s-%s' % (config['version'], arch)
+      config['tag'] = '%s-%s' % (config['version'], arch)
 
       if config['arch'] == 'amd64':
         config['platform'] = 'amd64'
