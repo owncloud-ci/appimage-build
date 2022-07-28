@@ -20,7 +20,7 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.r
         # qtbase
         libxcb libxcb-devel xcb-util xcb-util-devel mesa-libGL-devel libxkbcommon-devel libudev-devel \
         xcb-util-keysyms-devel libxkbcommon-x11-devel libinput-devel xcb-util-image-devel \
-        mesa-libgbm-devel xcb-util-wm-devel xcb-util-renderutil-devel libSM-devel \
+        mesa-libgbm-devel xcb-util-wm-devel xcb-util-renderutil-devel libSM-devel at-spi2-core-devel \
         # qtwebengine
         pciutils-devel nss-devel nspr-devel \
         cups-devel pulseaudio-libs-devel libcap-devel alsa-lib-devel libXrandr-devel \
