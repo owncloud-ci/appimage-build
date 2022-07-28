@@ -1,0 +1,87 @@
+FROM centos:7
+
+LABEL Description="ownCloud CentOS 7 Base for use with KDE Craft"
+LABEL maintainer="Fabian Müller <fmueller@owncloud.com>"
+
+# Start off as root
+USER root
+
+# add powershell for tooling
+RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo && \
+    yum update -y && \
+    # install some core tools
+    yum install -y which cmake python3 powershell && \
+    # probably too much
+    yum groupinstall -y "Development Tools" && \
+    # prepare devtoolset
+    yum install -y centos-release-scl && \
+    yum install -y \
+        # install Qt build dependencies, see: https://wiki.qt.io/Building_Qt_5_from_Git
+        # qtbase
+        libxcb libxcb-devel xcb-util xcb-util-devel mesa-libGL-devel libxkbcommon-devel libudev-devel \
+        xcb-util-keysyms-devel libxkbcommon-x11-devel libinput-devel xcb-util-image-devel \
+        mesa-libgbm-devel xcb-util-wm-devel xcb-util-renderutil-devel libSM-devel \
+        # qtwebengine
+        pciutils-devel nss-devel nspr-devel \
+        cups-devel pulseaudio-libs-devel libcap-devel alsa-lib-devel libXrandr-devel \
+        libXcomposite-devel libXcursor-devel\
+        alsa-lib-devel libxkbfile-devel \
+        # qtmultimedia
+        pulseaudio-libs-devel alsa-lib-devel gstreamer1-devel gstreamer1-plugins-base-devel wayland-devel \
+        # qtwebkit
+        ruby \
+        # qtspeech
+        speech-dispatcher-devel \
+        # kshimgen
+        glibc-static \
+        # kfilemetadata
+        libattr-devel \
+        # kio
+        libmount-devel libblkid-devel \
+        # debugging
+        nano \
+        # appimages
+        fuse fuse-libs fuse-devel\
+        # CI support
+        openssh-server java-1.8.0-openjdk-headless openjdk-8-jre-headless \
+        # kdev-python
+        python3-devel \
+        # latest devtoolset
+        devtoolset-9 \
+        # deps for git
+        openssl-devel curl-devel zlib-devel && \
+    yum remove -y git &&\
+    yum clean -y all
+
+# python3 dependencies for CI integration
+ENV PIP_CACHE_DIR=/var/cache/pip3
+RUN python3 -m pip install --upgrade pip && python3 -m pip install pyyaml lxml paramiko
+
+# use gold for linking
+#RUN alternatives --install /opt/rh/devtoolset-9/root/usr/bin/ld ld-9 /opt/rh/devtoolset-9/root/usr/bin/ld.gold 1
+
+# enable devtoolset by default
+COPY /entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+SHELL ["/entrypoint.sh", "bash", "-c"]
+
+# patch header to make it standalone, required for poppler compilation
+RUN sed -i '/#define _HASHT_H_/a #include <prtypes.h>' /usr/include/nss3/hasht.h
+
+# Setup a user account for everything else to be done under
+RUN useradd -d /home/appimage/ -u 1000 --user-group --create-home -G video appimage
+# Make sure SSHD will be able to startup
+RUN mkdir /var/run/sshd/
+# Get locales in order
+RUN localedef -c -i en_US -f UTF-8 en_US.UTF-8
+
+# let sshd-keygen work
+COPY etc_rc_d_init_d_functions.sh /etc/rc.d/init.d/functions
+RUN sshd-keygen
+
+# build git
+COPY build-git.sh /usr/local/bin/build-git.sh
+RUN GIT_VERSION=2.35.1 bash build-git.sh
+
+# let git work
+RUN git config --system merge.defaultToUpstream true
