@@ -58,12 +58,15 @@ ENV PIP_CACHE_DIR=/var/cache/pip3
 RUN python3 -m pip install --upgrade pip && python3 -m pip install pyyaml lxml paramiko
 
 # use gold for linking
-#RUN alternatives --install /opt/rh/devtoolset-9/root/usr/bin/ld ld-9 /opt/rh/devtoolset-9/root/usr/bin/ld.gold 1
+RUN alternatives --install /opt/rh/devtoolset-9/root/usr/bin/ld ld-9 /opt/rh/devtoolset-9/root/usr/bin/ld.gold 1
 
-# enable devtoolset by default
-COPY /entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-SHELL ["/entrypoint.sh", "bash", "-c"]
+# use latest devtoolset
+COPY scl_enable.sh /usr/local/bin/scl_enable.sh
+ENV BASH_ENV="/usr/local/bin/scl_enable.sh" \
+    ENV="/usr/local/bin/scl_enable.sh" \
+    PROMPT_COMMAND=". /usr/local/bin/scl_enable.sh"
+
+COPY scl_enable.ps1  /opt/microsoft/powershell/7/Microsoft.PowerShell_profile.ps1
 
 # patch header to make it standalone, required for poppler compilation
 RUN sed -i '/#define _HASHT_H_/a #include <prtypes.h>' /usr/include/nss3/hasht.h
