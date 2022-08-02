@@ -1,5 +1,5 @@
 # get the devtoolset env
-$env2 = $(bash -c "source /usr/local/bin/scl_enable.sh && printenv")
+$env2 = $($(bash -c "source /usr/local/bin/scl_enable.sh && printenv --null") | Out-String) -Split "`0"
 
 # clean current env
 Get-ChildItem env: | ForEach-Object {
