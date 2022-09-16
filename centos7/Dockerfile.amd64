@@ -56,7 +56,7 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.r
 # use gold for linking
 RUN alternatives --install /opt/rh/devtoolset-9/root/usr/bin/ld ld-9 /opt/rh/devtoolset-9/root/usr/bin/ld.gold 1
 
-# use latest devtoolset
+# init env
 COPY prepare_env.sh /usr/local/bin/prepare_env.sh
 ENV BASH_ENV="/usr/local/bin/prepare_env.sh" \
     ENV="/usr/local/bin/prepare_env.sh" \
