@@ -4,7 +4,7 @@ unset BASH_ENV PROMPT_COMMAND ENV
 export PKG_CONFIG_PATH="$(pkg-config --variable pc_path pkg-config)"
 
 # setup pyenv
-export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_ROOT="/root/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
