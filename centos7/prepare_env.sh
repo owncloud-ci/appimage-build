@@ -6,10 +6,14 @@ unset BASH_ENV PROMPT_COMMAND ENV
 # ensure we have a fully defined PKG_CONFIG_PATH before it is extended by devtoolset
 export PKG_CONFIG_PATH="$(pkg-config --variable pc_path pkg-config)"
 
-# setup pyenv once it's installed
-if command -v pyenv >/dev/null; then
+if [[ "$PYENV_ROOT" != "" ]]; then
     export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
+
+    # pyenv may not have been installed yet when we run this script
+    if command -v pyenv >/dev/null; then
+        # https://github.com/pyenv/pyenv/issues/1157#issuecomment-418446159
+        eval "$(pyenv init - --no-rehash)"
+    fi
 fi
 
 set +e
