@@ -1,3 +1,8 @@
+# set default error actions
+$ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
+$PSNativeCommandUseErrorActionPreference = $true;
+
 # get the devtoolset env
 $env2 = $($(bash -c "source /usr/local/bin/prepare_env.sh && printenv --null") | Out-String) -Split "`0"
 
