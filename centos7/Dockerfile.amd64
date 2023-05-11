@@ -99,3 +99,7 @@ RUN git clone https://github.com/pyenv/pyenv.git "$PYENV_ROOT" && \
     pyenv global 3.9.14 && \
     python3 -m pip install --upgrade pip && \
     python3 -m pip install pyyaml lxml paramiko
+
+# make Qt build use UTF-8 properly
+RUN localedef -c -f UTF-8 -i en_US en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
