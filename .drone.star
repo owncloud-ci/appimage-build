@@ -239,6 +239,7 @@ def publish(config):
       'repo': 'owncloudci/%s' % config['repo'],
       'context': config['path'],
       'pull_image': False,
+      'build_args': ','.join(["%s=%s" % (item, value) for item, value in config['build_args'].items()]),
     },
     'when': {
       'ref': [
