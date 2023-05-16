@@ -6,6 +6,9 @@ LABEL maintainer="Fabian Müller <fmueller@owncloud.com>"
 # Start off as root
 USER root
 
+# 9 for owncloud-client < 5
+ARG DEVTOOLSET_VERSION=9
+
 # add powershell for tooling
 RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo && \
     yum update -y && \
@@ -45,7 +48,7 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.r
         # CI support
         openssh-server java-1.8.0-openjdk-headless openjdk-8-jre-headless \
         # latest devtoolset
-        devtoolset-9 \
+        devtoolset-${DEVTOOLSET_VERSION} \
         # deps for git
         openssl-devel curl-devel zlib-devel \
         # pyenv

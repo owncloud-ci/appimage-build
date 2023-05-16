@@ -1,7 +1,22 @@
 def main(ctx):
-  versions = [
-    'centos7',
-  ]
+  dists = {
+    'centos7': {
+      'builds': [
+        {
+          'tag_suffixes': ['latest', 'devtoolset9'],
+          'build_args': {
+            'DEVTOOLSET_VERSION': 9,
+          }
+        },
+        {
+          'tag_suffixes': ['devtoolset11'],
+          'build_args': {
+            'DEVTOOLSET_VERSION': 9,
+          }
+        },
+      ]
+    }
+  }
 
   arches = [
     'amd64',
@@ -16,38 +31,44 @@ def main(ctx):
 
   stages = []
 
-  for version in versions:
-    config['version'] = version
+  for dist_name, dist_config in dists.items():
+    config['version'] = dist_name
 
     # unlike other repositories, e.g., appimage-deployment, this repo manages different distributions
-    config['path'] = '%s' % config['version']
+    config['path'] = dist_name
 
-    m = manifest(config)
-    inner = []
+    for build in dist_config['builds']:
+      inner = []
 
-    for arch in arches:
-      config['arch'] = arch
+      for arch in arches:
+        config['arch'] = arch
 
-      config['tag'] = '%s-%s' % (config['version'], arch)
+        tags = []
+        for tag_suffix in build['tag_suffixes']:
+          tags.append('%s-%s-%s' % (config['version'], tag_suffix, arch))
+        config['tags'] = tags
 
-      if config['arch'] == 'amd64':
-        config['platform'] = 'amd64'
+        if config['arch'] == 'amd64':
+          config['platform'] = 'amd64'
 
-      if config['arch'] == 'arm64v8':
-        config['platform'] = 'arm64'
+        if config['arch'] == 'arm64v8':
+          config['platform'] = 'arm64'
 
-      if config['arch'] == 'arm32v7':
-        config['platform'] = 'arm'
+        if config['arch'] == 'arm32v7':
+          config['platform'] = 'arm'
 
-      config['internal'] = '%s-%s' % (ctx.build.commit, config['tag'])
+        config['internal'] = '%s-%s' % (ctx.build.commit, config['tags'][0])
 
-      d = docker(config)
-      m['depends_on'].append(d['name'])
+        m = manifest(config)
 
-      inner.append(d)
+        d = docker(config)
+        m['depends_on'].append(d['name'])
 
-    inner.append(m)
-    stages.extend(inner)
+        inner.append(d)
+
+        inner.append(m)
+
+      stages.extend(inner)
 
   after = [
     notification(config),
@@ -63,7 +84,7 @@ def docker(config):
   return {
     'kind': 'pipeline',
     'type': 'docker',
-    'name': '%s-%s' % (config['arch'], config['path']),
+    'name': '%s-%s' % (config['arch'], config['tags'][0]),
     'platform': {
       'os': 'linux',
       'arch': config['platform'],
@@ -85,7 +106,7 @@ def manifest(config):
   return {
     'kind': 'pipeline',
     'type': 'docker',
-    'name': 'manifest-%s' % config['path'],
+    'name': 'manifest-%s' % config['tags'][0],
     'platform': {
       'os': 'linux',
       'arch': 'amd64',
@@ -184,7 +205,7 @@ def dryrun(config):
     'image': 'plugins/docker',
     'settings': {
       'dry_run': True,
-      'tags': config['tag'],
+      'tags': config['tags'],
       'dockerfile': '%s/Dockerfile.%s' % (config['path'], config['arch']),
       'repo': 'owncloudci/%s' % config['repo'],
       'context': config['path'],
@@ -207,7 +228,7 @@ def publish(config):
       'password': {
         'from_secret': 'public_password',
       },
-      'tags': config['tag'],
+      'tags': config['tags'],
       'dockerfile': '%s/Dockerfile.%s' % (config['path'], config['arch']),
       'repo': 'owncloudci/%s' % config['repo'],
       'context': config['path'],
