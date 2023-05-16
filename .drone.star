@@ -11,7 +11,7 @@ def main(ctx):
         {
           'tag_suffixes': ['devtoolset11'],
           'build_args': {
-            'DEVTOOLSET_VERSION': 9,
+            'DEVTOOLSET_VERSION': 11,
           }
         },
       ]
@@ -58,6 +58,8 @@ def main(ctx):
           config['platform'] = 'arm'
 
         config['internal'] = '%s-%s' % (ctx.build.commit, config['tags'][0])
+
+        config['build_args'] = build['build_args']
 
         m = manifest(config)
 
@@ -209,6 +211,7 @@ def dryrun(config):
       'dockerfile': '%s/Dockerfile.%s' % (config['path'], config['arch']),
       'repo': 'owncloudci/%s' % config['repo'],
       'context': config['path'],
+      'build_args': ','.join(["%s=%s" % (item, value) for item, value in config['build_args'].items()]),
     },
     'when': {
       'ref': [
