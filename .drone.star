@@ -5,13 +5,13 @@ def main(ctx):
         {
           'tag_suffixes': ['latest', 'devtoolset9'],
           'build_args': {
-            'DEVTOOLSET_VERSION': 9,
+            'devtoolset_version': 9,
           }
         },
         {
           'tag_suffixes': ['devtoolset11'],
           'build_args': {
-            'DEVTOOLSET_VERSION': 11,
+            'devtoolset_version': 11,
           }
         },
       ]

@@ -7,7 +7,8 @@ LABEL maintainer="Fabian Müller <fmueller@owncloud.com>"
 USER root
 
 # 9 for owncloud-client < 5
-ARG DEVTOOLSET_VERSION=9
+ARG devtoolset_version=9
+ENV DEVTOOLSET_VERSION=${devtoolset_version}
 
 # add powershell for tooling
 RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo && \
