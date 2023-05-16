@@ -3,7 +3,7 @@ def main(ctx):
     'centos7': {
       'builds': [
         {
-          'tag_suffixes': ['latest', 'devtoolset9'],
+          'tag_suffixes': [None, 'latest', 'devtoolset9'],
           'build_args': {
             'devtoolset_version': 9,
           }
@@ -45,7 +45,10 @@ def main(ctx):
 
         tags = []
         for tag_suffix in build['tag_suffixes']:
-          tags.append('%s-%s-%s' % (config['version'], tag_suffix, arch))
+            if not tag_suffix:
+                tags.append('%s-%s' % (config['version'], arch))
+            else:
+                tags.append('%s-%s-%s' % (config['version'], tag_suffix, arch))
         config['tags'] = tags
 
         if config['arch'] == 'amd64':
