@@ -58,7 +58,7 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.r
     yum clean -y all
 
 # use gold for linking
-RUN alternatives --install /opt/rh/devtoolset-9/root/usr/bin/ld ld-9 /opt/rh/devtoolset-9/root/usr/bin/ld.gold 1
+RUN alternatives --install /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/root/usr/bin/ld ld-${DEVTOOLSET_VERSION} /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/root/usr/bin/ld.gold 1
 
 # enable experimental native error handling in powershell
 RUN pwsh -C Enable-ExperimentalFeature PSNativeCommandErrorActionPreference
