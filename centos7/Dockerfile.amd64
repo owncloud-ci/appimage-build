@@ -18,13 +18,14 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.r
     # probably too much
     yum groupinstall -y "Development Tools" && \
     # prepare devtoolset
-    yum install -y centos-release-scl && \
+    yum install -y centos-release-scl epel-release && \
     yum install -y \
         # install Qt build dependencies, see: https://wiki.qt.io/Building_Qt_5_from_Git
         # qtbase
         libxcb libxcb-devel xcb-util xcb-util-devel mesa-libGL-devel libxkbcommon-devel libudev-devel \
         xcb-util-keysyms-devel libxkbcommon-x11-devel libinput-devel xcb-util-image-devel \
         mesa-libgbm-devel xcb-util-wm-devel xcb-util-renderutil-devel libSM-devel at-spi2-core-devel \
+        xcb-util-cursor-devel \
         # qtwebengine
         pciutils-devel nss-devel nspr-devel \
         cups-devel pulseaudio-libs-devel libcap-devel alsa-lib-devel libXrandr-devel \
