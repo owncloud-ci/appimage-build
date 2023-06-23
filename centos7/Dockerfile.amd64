@@ -7,7 +7,7 @@ LABEL maintainer="Fabian Müller <fmueller@owncloud.com>"
 USER root
 
 # 9 for owncloud-client < 5
-ARG devtoolset_version=9
+ARG devtoolset_version=11
 ENV DEVTOOLSET_VERSION=${devtoolset_version}
 
 # add powershell for tooling
