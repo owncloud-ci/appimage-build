@@ -14,6 +14,12 @@ def main(ctx):
             'devtoolset_version': 11,
           }
         },
+        {
+          'tag_suffixes': ['devtoolset12'],
+          'build_args': {
+            'devtoolset_version': 12,
+          }
+        },
       ]
     }
   }
