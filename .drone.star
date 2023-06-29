@@ -4,6 +4,7 @@ def main(ctx):
       'builds': [
         {
           'tag_suffixes': [None, 'latest', 'devtoolset9'],
+          # 9 for owncloud-client < 5
           'build_args': {
             'devtoolset_version': 9,
           }
