@@ -51,9 +51,9 @@ RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.r
         # latest devtoolset
         devtoolset-${DEVTOOLSET_VERSION} \
         # deps for git
-        openssl-devel curl-devel zlib-devel \
+        openssl11 openssl11-devel curl-devel zlib-devel \
         # pyenv
-        zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel \
+        zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel tk-devel libffi-devel xz-devel \
         # dpkg
         libmd-devel \
         # rpm
@@ -102,9 +102,11 @@ ENV PYENV_ROOT=/opt/pyenv
 RUN git clone https://github.com/pyenv/pyenv.git "$PYENV_ROOT" && \
     command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH" && \
     eval "$(pyenv init -)" && \
-    # python 3.10 requires openssl 1.1
-    pyenv install 3.9.14 && \
-    pyenv global 3.9.14 && \
+    # https://github.com/pyenv/pyenv/issues/2416
+    export CFLAGS="$CFLAGS $(pkg-config --cflags openssl11)" && \
+    export LDFLAGS="$LDFLAGS $(pkg-config --libs openssl11)" && \
+    pyenv install 3.11.4 && \
+    pyenv global 3.11.4 && \
     python3 -m pip install --upgrade pip && \
     python3 -m pip install pyyaml lxml paramiko
 
