@@ -56,7 +56,9 @@ RUN curl -OL https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.4.tar.xz && \
     make -j5 && \
     make install && \
     cd .. && \
-    rm -Rf xcb-util-cursor-0.1.4
+    rm -Rf xcb-util-cursor-0.1.4 && \
+    rm -Rf xcb-util-cursor-0.1.4.tar.xz
 
 # Finally drop to an unprivileged user account
 USER appimage
+WORKDIR /home/appimage
