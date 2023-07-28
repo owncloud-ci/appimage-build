@@ -1,5 +1,13 @@
 def main(ctx):
   dists = {
+    'sles15': {
+      'builds': [
+        {
+          'tag_suffixes': [None, 'latest'],
+          'build_args': {}
+        },
+      ]
+    },
     'centos7': {
       'builds': [
         {
