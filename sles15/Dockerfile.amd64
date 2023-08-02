@@ -60,5 +60,7 @@ RUN curl -OL https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.4.tar.xz && \
     rm -Rf xcb-util-cursor-0.1.4.tar.xz
 
 # Finally drop to an unprivileged user account
-USER appimage
-WORKDIR /home/appimage
+# doesn't work with drone 💖
+# https://stackoverflow.com/a/50613378
+# USER appimage
+# WORKDIR /home/appimage
