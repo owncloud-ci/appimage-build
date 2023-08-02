@@ -1,4 +1,4 @@
-FROM registry.suse.com/bci/bci-base:latest
+FROM registry.suse.com/bci/bci-base:latest@sha256:001e748caf82190e6d51e6172552083d37f98260ee594581ca233a4fddd7ca26
 
 LABEL Description="KDE Suse Linux Enterprise Server 15 Base for use with Craft"
 LABEL maintainer="KDE Sysadmin <sysadmin@kde.org>"
