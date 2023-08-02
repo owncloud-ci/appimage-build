@@ -15,7 +15,9 @@ RUN zypper --non-interactive update && \
     vulkan-devel vulkan-headers wayland-devel Mesa-libGL-devel \
     libX11-devel libX11-xcb1 libxcb-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel libxkbcommon-x11-devel libxkbcommon-devel libXi-devel xcb-util-image-devel \
     flex bison gperf libicu-devel ruby awk patch \
-    alsa-devel libXcomposite-devel libXcursor-devel libXrandr-devel libXtst-devel mozilla-nspr-devel mozilla-nss-devel gperf bison nodejs-default nodejs-devel-default && \
+    alsa-devel libXcomposite-devel libXcursor-devel libXrandr-devel libXtst-devel mozilla-nspr-devel mozilla-nss-devel gperf bison nodejs-default nodejs-devel-default \
+    # python2
+    zlib-devel sqlite3-devel libopenssl-1_1-devel && \
     # cleanup to ensure we don't leave behind anything that doesn't need to be in the image
     zypper --non-interactive clean -a && \
     # make sure the appropriate gcc/python versions are the defaults
@@ -64,3 +66,12 @@ RUN curl -OL https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.4.tar.xz && \
 # https://stackoverflow.com/a/50613378
 # USER appimage
 # WORKDIR /home/appimage
+
+# python2 for breakpad 🤬
+ENV PIP_CACHE_DIR=/var/cache/pip3
+ENV PYENV_ROOT=/opt/pyenv
+ENV PATH="${PATH}:${PYENV_ROOT}/shims"
+RUN git clone https://github.com/pyenv/pyenv.git "$PYENV_ROOT" && \
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH" && \
+    eval "$(pyenv init -)" && \
+    pyenv install 2.7.18
