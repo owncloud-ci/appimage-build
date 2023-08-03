@@ -17,7 +17,10 @@ RUN zypper --non-interactive update && \
     flex bison gperf libicu-devel ruby awk patch \
     alsa-devel libXcomposite-devel libXcursor-devel libXrandr-devel libXtst-devel mozilla-nspr-devel mozilla-nss-devel gperf bison nodejs-default nodejs-devel-default \
     # python2
-    zlib-devel sqlite3-devel libopenssl-1_1-devel && \
+    zlib-devel sqlite3-devel libopenssl-1_1-devel \
+    # rpm
+    popt-devel file-devel \
+    && \
     # cleanup to ensure we don't leave behind anything that doesn't need to be in the image
     zypper --non-interactive clean -a && \
     # make sure the appropriate gcc/python versions are the defaults
