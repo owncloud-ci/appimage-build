@@ -20,6 +20,8 @@ RUN zypper --non-interactive update && \
     zlib-devel sqlite3-devel libopenssl-1_1-devel \
     # rpm
     popt-devel file-devel \
+    # dpkg
+    libmd-devel  ncurses-devel \
     && \
     # cleanup to ensure we don't leave behind anything that doesn't need to be in the image
     zypper --non-interactive clean -a && \
