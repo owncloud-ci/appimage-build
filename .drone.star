@@ -223,6 +223,7 @@ def dryrun(config):
       'dockerfile': '%s/Dockerfile.%s' % (config['path'], config['arch']),
       'repo': 'owncloudci/%s' % config['repo'],
       'context': config['path'],
+      'cache_from': config['tags'][0],
       'build_args': ','.join(["%s=%s" % (item, value) for item, value in config['build_args'].items()]),
     },
     'when': {
