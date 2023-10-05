@@ -3,3 +3,14 @@ FROM invent-registry.kde.org/sysadmin/ci-images/sles15-craft@sha256:b4734f262aa2
 # using a non root user doesn't work with drone 💖
 # https://stackoverflow.com/a/50613378
 USER root
+
+
+RUN zypper --non-interactive update && \
+    zypper --non-interactive install \
+    # rpm
+    popt-devel file-devel \
+    # dpkg
+    libmd-devel  ncurses-devel \
+    && \
+    # cleanup to ensure we don't leave behind anything that doesn't need to be in the image
+    zypper --non-interactive clean -a
