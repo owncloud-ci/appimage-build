@@ -14,11 +14,3 @@ RUN zypper --non-interactive update && \
     && \
     # cleanup to ensure we don't leave behind anything that doesn't need to be in the image
     zypper --non-interactive clean -a
-
-RUN zypper --non-interactive install bzip2 && \
-    curl -q http://zsync.moria.org.uk/download/zsync-0.6.2.tar.bz2 | tar -xj && \
-    cd zsync-0.6.2/ && \
-    ./configure --prefix=/usr/local && \
-    make -j4 install && \
-    cd .. && \
-    rm -r zsync-0.6.2/
