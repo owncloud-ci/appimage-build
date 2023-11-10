@@ -14,3 +14,6 @@ RUN zypper --non-interactive update && \
     && \
     # cleanup to ensure we don't leave behind anything that doesn't need to be in the image
     zypper --non-interactive clean -a
+
+# the code is checked out on the host so the user will be different
+RUN git config --global --add safe.directory '*'
