@@ -16,4 +16,4 @@ RUN zypper --non-interactive update && \
     zypper --non-interactive clean -a
 
 # the code is checked out on the host so the user will be different
-RUN git config --global --add safe.directory '*'
+RUN git config --system --add safe.directory '*'
