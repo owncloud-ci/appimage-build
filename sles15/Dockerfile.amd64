@@ -1,4 +1,4 @@
-FROM invent-registry.kde.org/sysadmin/ci-images/sles15-craft@sha256:a1d8f5683230defd69a7c7fbdd0e185c98307bdf6d314131da30ec63c3527fe0
+FROM invent-registry.kde.org/sysadmin/ci-images/sles15-craft@sha256:6bbddd33b1814507213f26df12752d7a024699696993ab2ec2d774c9aa7e0146
 
 # using a non root user doesn't work with drone 💖
 # https://stackoverflow.com/a/50613378
